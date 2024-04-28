@@ -14,6 +14,8 @@ const WaterQualityAnalysis = () => {
   const [ph2, setPh2] = useState(0);
   const [ph3, setPh3] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
+  const [alertSensor, setAlertSensor] = useState(null);
+
 
   const [button1State, setButton1State] = useState(0);
   const [button2State, setButton2State] = useState(0);
@@ -72,6 +74,10 @@ const WaterQualityAnalysis = () => {
       const data1 = await response1.json();
       const data2 = await response2.json();
       const data3 = await response3.json();
+
+      checkIsWaterDrinkable(data1, 1);
+      checkIsWaterDrinkable(data2, 2);
+      checkIsWaterDrinkable(data3, 3);
 
       const data4 = await response4.json();
       const data5 = await response5.json();
@@ -178,7 +184,7 @@ const WaterQualityAnalysis = () => {
           scales: {
             y: {
               beginAtZero: true,
-              min: 20,
+              min: 5,
               max: 40,
             }
           },
@@ -200,13 +206,24 @@ const WaterQualityAnalysis = () => {
   }, []);
 
 
-  const checkIsWaterDrinkable = (temperatureValue) => {
-    if (temperatureValue > 25 && temperatureValue < 32) {
-      setShowAlert(false);
-    } else {
+  // const checkIsWaterDrinkable = (temperatureValue) => {
+  //   if (temperatureValue > 25 && temperatureValue < 32) {
+  //     setShowAlert(false);
+  //   } else {
+  //     setShowAlert(true);
+  //   }
+  // };
+
+  const checkIsWaterDrinkable = (temperatureValue, sensorNumber) => {
+    if (temperatureValue > 35) {
       setShowAlert(true);
+      setAlertSensor(sensorNumber);
+    } else {
+      // setShowAlert(false);
+      // setAlertSensor(sensorNumber);
     }
   };
+
   return (
     <>
       <div className={containerClasses}>
@@ -253,6 +270,19 @@ const WaterQualityAnalysis = () => {
           </div>
         </aside>
         <div className="flex flex-col flex-1 w-full overflow-y-auto">
+
+          {showAlert && (
+            <Toast onClose={() => setShowAlert(false)} className='bg-red-500 ml-96 mt-5 text-white items-center justify-center '>
+              <Toast.Header>
+                <strong className="mr-auto">Alert</strong>
+                <small>Now</small>
+              </Toast.Header>
+              <Toast.Body>
+                Water is not suitable. Temperature from Sensor {alertSensor} exceeds 35 degrees.
+              </Toast.Body>
+            </Toast>
+          )}
+
           <header className="z-40 py-4  bg-gray-800  ">
             <div className="flex items-center justify-between h-8 px-6 mx-auto">
               <div className="flex justify-center  mt-2 mr-4">

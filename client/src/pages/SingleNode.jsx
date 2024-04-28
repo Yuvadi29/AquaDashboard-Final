@@ -42,7 +42,7 @@ const WaterQualityAnalysis = () => {
     // };
 
     const updateButtonState = (buttonNumber, newState) => {
-        const token = 'WfQITWPhO1JeF3zrRGXvt09vi14Ekms-';
+        const token = 'sjiDRT8_iO0iq4fb3WObFFD0GzzU635t';
 
         fetch(`https://blynk.cloud/external/api/update?token=${token}&v${buttonNumber}=${newState}`)
             .then((response) => response.json())
@@ -59,13 +59,13 @@ const WaterQualityAnalysis = () => {
     const fetchData = async () => {
         try {
             // Temperature Data Stream
-            const response1 = await fetch('https://blynk.cloud/external/api/get?token=WfQITWPhO1JeF3zrRGXvt09vi14Ekms-&v1');
+            const response1 = await fetch('https://blynk.cloud/external/api/get?token=sjiDRT8_iO0iq4fb3WObFFD0GzzU635t&v0');
             // const response2 = await fetch('https://blynk.cloud/external/api/get?token=WfQITWPhO1JeF3zrRGXvt09vi14Ekms-&v4');
             // const response3 = await fetch('https://blynk.cloud/external/api/get?token=WfQITWPhO1JeF3zrRGXvt09vi14Ekms-&v7');
 
 
             // PH Data Stream
-            const response4 = await fetch('https://blynk.cloud/external/api/get?token=WfQITWPhO1JeF3zrRGXvt09vi14Ekms-&v2');
+            const response4 = await fetch('https://blynk.cloud/external/api/get?token=sjiDRT8_iO0iq4fb3WObFFD0GzzU635t&v1');
             // const response5 = await fetch('https://blynk.cloud/external/api/get?token=WfQITWPhO1JeF3zrRGXvt09vi14Ekms-&v5');
             // const response6 = await fetch('https://blynk.cloud/external/api/get?token=WfQITWPhO1JeF3zrRGXvt09vi14Ekms-&v8');
 
@@ -118,7 +118,7 @@ const WaterQualityAnalysis = () => {
             myChart.data.datasets[0].data.push(data1);
             // myChart.data.datasets[1].data.push(data2);
             // myChart.data.datasets[2].data.push(data3);
-            myChart.data.datasets[3].data.push(data4);
+            myChart.data.datasets[1].data.push(data4);
             // myChart.data.datasets[4].data.push(data5);
             // myChart.data.datasets[5].data.push(data6);
             myChart.update();
@@ -181,7 +181,7 @@ const WaterQualityAnalysis = () => {
                     scales: {
                         y: {
                             beginAtZero: true,
-                            min: 20,
+                            min: 5,
                             max: 40,
                         }
                     },
@@ -195,6 +195,7 @@ const WaterQualityAnalysis = () => {
 
     useEffect(() => {
         fetchData();
+        checkIsWaterDrinkable();
         const interval = setInterval(() => {
             fetchData();
         }, 2000); // Fetch data every 10 seconds
@@ -204,7 +205,7 @@ const WaterQualityAnalysis = () => {
 
 
     const checkIsWaterDrinkable = (temperatureValue) => {
-        if (temperatureValue > 25 && temperatureValue < 32) {
+        if (temperatureValue > 35 && temperatureValue < 25) {
             setShowAlert(false);
         } else {
             setShowAlert(true);
